@@ -21,6 +21,7 @@
 
 #include "..\Solving and Generating\GameBoard.h"
 #include "DebugPanel.h"
+#include <wx/dcbuffer.h>
 
 enum Controls { SET, NOTE, CLEAR};
 
@@ -31,8 +32,8 @@ class SudokuSolverFrame: public wxFrame
         SudokuSolverFrame(wxWindow* parent,wxWindowID id = -1);
         void CopyToGuessBoard();
         virtual ~SudokuSolverFrame();
-        void DrawBoardBackground(wxPaintDC &dc);
-        void DrawBoardNumbers(wxPaintDC &dc);
+        void DrawBoardBackground(wxBufferedDC &dc);
+        void DrawBoardNumbers(wxBufferedDC &dc);
         void SetRow(unsigned int val) { row = val;}
         void SetCol(unsigned int val) { col = val;}
         void SetNumSelect(unsigned int val) {numSelect = val;}
@@ -60,6 +61,11 @@ class SudokuSolverFrame: public wxFrame
         void OnButtonNumClick(wxCommandEvent& event);
         void OnGameBoardPanelKeyUp(wxKeyEvent& event);
         void OnDifficultySelected(wxCommandEvent& event);
+        void OnMainPanelEraseBackground(wxEraseEvent& event);
+        void OnEraseBackground(wxEraseEvent& event);
+        void OnGameBoardPanelEraseBackground(wxEraseEvent& event);
+        void OnControlPanelEraseBackground(wxEraseEvent& event);
+        void OnControlPanelPaint(wxPaintEvent& event);
         //*)
 
         //(*Identifiers(SudokuSolverFrame)

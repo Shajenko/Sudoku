@@ -98,9 +98,9 @@ SudokuSolverFrame::SudokuSolverFrame(wxWindow* parent,wxWindowID id)
 
     Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE|wxFULL_REPAINT_ON_RESIZE, _T("wxID_ANY"));
     BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
-    MainPanel = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxDefaultSize, 0, _T("ID_PANEL1"));
+    MainPanel = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE, _T("ID_PANEL1"));
     BoxSizer2 = new wxBoxSizer(wxVERTICAL);
-    GameBoardPanel = new wxPanel(MainPanel, ID_PANEL2, wxDefaultPosition, wxSize(600,600), wxFULL_REPAINT_ON_RESIZE, _T("ID_PANEL2"));
+    GameBoardPanel = new wxPanel(MainPanel, ID_PANEL2, wxDefaultPosition, wxSize(600,600), wxNO_FULL_REPAINT_ON_RESIZE, _T("ID_PANEL2"));
     BoxSizer2->Add(GameBoardPanel, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     ControlPanel = new wxPanel(MainPanel, ID_PANELCONTROL, wxDefaultPosition, wxDefaultSize, 0, _T("ID_PANELCONTROL"));
     BoxSizer3 = new wxBoxSizer(wxVERTICAL);
@@ -173,6 +173,7 @@ SudokuSolverFrame::SudokuSolverFrame(wxWindow* parent,wxWindowID id)
     BoxSizer1->SetSizeHints(this);
 
     GameBoardPanel->Connect(wxEVT_PAINT,(wxObjectEventFunction)&SudokuSolverFrame::OnGameBoardPanelPaint,0,this);
+    GameBoardPanel->Connect(wxEVT_ERASE_BACKGROUND,(wxObjectEventFunction)&SudokuSolverFrame::OnGameBoardPanelEraseBackground,0,this);
     GameBoardPanel->Connect(wxEVT_KEY_UP,(wxObjectEventFunction)&SudokuSolverFrame::OnGameBoardPanelKeyUp,0,this);
     GameBoardPanel->Connect(wxEVT_LEFT_UP,(wxObjectEventFunction)&SudokuSolverFrame::OnGameBoardPanelLeftUp,0,this);
     Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuSolverFrame::OnButtonNumClick);
@@ -186,6 +187,8 @@ SudokuSolverFrame::SudokuSolverFrame(wxWindow* parent,wxWindowID id)
     Connect(ID_BUTTON10,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuSolverFrame::OnButtonNumClick);
     Connect(ID_BUTTON11,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuSolverFrame::OnButtonSetClick);
     Connect(ID_BUTTON12,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuSolverFrame::OnButtonNoteClick);
+    ControlPanel->Connect(wxEVT_PAINT,(wxObjectEventFunction)&SudokuSolverFrame::OnControlPanelPaint,0,this);
+    ControlPanel->Connect(wxEVT_ERASE_BACKGROUND,(wxObjectEventFunction)&SudokuSolverFrame::OnControlPanelEraseBackground,0,this);
     Connect(idNewPuzzle,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&SudokuSolverFrame::OnMenuNewPuzzleSelected);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&SudokuSolverFrame::OnQuit);
     Connect(idEasy,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&SudokuSolverFrame::OnDifficultySelected);
@@ -245,25 +248,37 @@ void SudokuSolverFrame::OnClose(wxCloseEvent& event)
 
 void SudokuSolverFrame::OnGameBoardPanelPaint(wxPaintEvent& event)
 {
-    wxPaintDC dc( GameBoardPanel );
+	wxPaintDC dc (GameBoardPanel);
+    wxBufferedDC bdc( &dc );
 
-	DrawBoardBackground(dc);
-	DrawBoardNumbers(dc);
+	DrawBoardBackground(bdc);
+	DrawBoardNumbers(bdc);
 }
 
-void SudokuSolverFrame::DrawBoardBackground(wxPaintDC &dc)
+void SudokuSolverFrame::DrawBoardBackground(wxBufferedDC &dc)
 {
 	unsigned int spSq = 0;
     unsigned int smallSide;
     unsigned int i,j;
 
-    wxColour LGray;
-    wxBrush LGrayBr;
+    wxColour LGray, Red, White;
+    wxBrush LGrayBr, RedBr, WhiteBr;
 
     LGray.Set(210,210,210);
+    Red.Set(210,0,0);
+    White.Set(255,255,255);
     LGrayBr.SetColour(LGray);
+    RedBr.SetColour(Red);
+    WhiteBr.SetColour(White);
 
     wxSize sz = GameBoardPanel->GetClientSize();
+
+    // Draw a background color
+    dc.SetBrush(WhiteBr);
+    dc.SetPen(*wxBLACK_PEN );
+    dc.DrawRectangle(0,0, sz.x, sz.y);
+
+    // Find the smallest side of the panel, use that as the side of the square board
     if (sz.x < sz.y)
         smallSide = sz.x;
     else
@@ -272,7 +287,7 @@ void SudokuSolverFrame::DrawBoardBackground(wxPaintDC &dc)
     spSq = smallSide / 9;
     smallSide -= 10;
 
-        // Set the Brush and Pen to red
+	// Set the Brush and Pen to light gray and black
     dc.SetBrush( LGrayBr );
     dc.SetPen(*wxBLACK_PEN );
     // Draw rectangle 40 pixels wide and 40 high
@@ -306,7 +321,7 @@ void SudokuSolverFrame::DrawBoardBackground(wxPaintDC &dc)
 
 }
 
-void SudokuSolverFrame::DrawBoardNumbers(wxPaintDC &dc)
+void SudokuSolverFrame::DrawBoardNumbers(wxBufferedDC &dc)
 {
 	unsigned int spSq = 0;
     unsigned int smallSide;
@@ -647,4 +662,32 @@ void SudokuSolverFrame::OnDifficultySelected(wxCommandEvent& event)
 		diff = MEDIUM;
 	if(MenuItemHard->GetId() == event.GetId())
 		diff = HARD;
+}
+
+
+void SudokuSolverFrame::OnGameBoardPanelEraseBackground(wxEraseEvent& event)
+{ // Blank function to eliminate flicker
+}
+
+void SudokuSolverFrame::OnControlPanelEraseBackground(wxEraseEvent& event)
+{ // Blank function to eliminate flicker
+}
+
+void SudokuSolverFrame::OnControlPanelPaint(wxPaintEvent& event)
+{
+	wxPaintDC dc (ControlPanel);
+    wxBufferedDC bdc( &dc );
+
+	wxColour LGray;
+    wxBrush LGrayBr;
+
+    LGray.Set(210,210,210);
+    LGrayBr.SetColour(LGray);
+
+    wxSize sz = ControlPanel->GetClientSize();
+
+    // Draw a background color
+    bdc.SetBrush(LGrayBr);
+    bdc.SetPen(*wxLIGHT_GREY_PEN );
+    bdc.DrawRectangle(0,0, sz.x, sz.y);
 }
