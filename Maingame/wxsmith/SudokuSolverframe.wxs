@@ -7,13 +7,15 @@
 		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
 			<object class="sizeritem">
 				<object class="wxPanel" name="ID_PANEL1" variable="MainPanel" member="yes">
+					<style>0</style>
 					<object class="wxBoxSizer" variable="BoxSizer2" member="no">
 						<orient>wxVERTICAL</orient>
 						<object class="sizeritem">
 							<object class="wxPanel" name="ID_PANEL2" variable="GameBoardPanel" member="yes">
 								<size>600,600</size>
-								<style>wxTAB_TRAVERSAL|wxFULL_REPAINT_ON_RESIZE</style>
+								<style>wxFULL_REPAINT_ON_RESIZE</style>
 								<handler function="OnGameBoardPanelPaint" entry="EVT_PAINT" />
+								<handler function="OnGameBoardPanelKeyUp" entry="EVT_KEY_UP" />
 								<handler function="OnGameBoardPanelLeftUp" entry="EVT_LEFT_UP" />
 							</object>
 							<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -22,6 +24,7 @@
 						</object>
 						<object class="sizeritem">
 							<object class="wxPanel" name="ID_PANELCONTROL" variable="ControlPanel" member="yes">
+								<style>0</style>
 								<object class="wxBoxSizer" variable="BoxSizer3" member="no">
 									<orient>wxVERTICAL</orient>
 									<object class="sizeritem">

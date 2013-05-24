@@ -98,11 +98,11 @@ SudokuSolverFrame::SudokuSolverFrame(wxWindow* parent,wxWindowID id)
 
     Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE|wxFULL_REPAINT_ON_RESIZE, _T("wxID_ANY"));
     BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
-    MainPanel = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
+    MainPanel = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxDefaultSize, 0, _T("ID_PANEL1"));
     BoxSizer2 = new wxBoxSizer(wxVERTICAL);
-    GameBoardPanel = new wxPanel(MainPanel, ID_PANEL2, wxDefaultPosition, wxSize(600,600), wxTAB_TRAVERSAL|wxFULL_REPAINT_ON_RESIZE, _T("ID_PANEL2"));
+    GameBoardPanel = new wxPanel(MainPanel, ID_PANEL2, wxDefaultPosition, wxSize(600,600), wxFULL_REPAINT_ON_RESIZE, _T("ID_PANEL2"));
     BoxSizer2->Add(GameBoardPanel, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    ControlPanel = new wxPanel(MainPanel, ID_PANELCONTROL, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANELCONTROL"));
+    ControlPanel = new wxPanel(MainPanel, ID_PANELCONTROL, wxDefaultPosition, wxDefaultSize, 0, _T("ID_PANELCONTROL"));
     BoxSizer3 = new wxBoxSizer(wxVERTICAL);
     BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
     Button1 = new wxButton(ControlPanel, ID_BUTTON1, _("1"), wxDefaultPosition, wxSize(35,25), 0, wxDefaultValidator, _T("ID_BUTTON1"));
@@ -173,6 +173,7 @@ SudokuSolverFrame::SudokuSolverFrame(wxWindow* parent,wxWindowID id)
     BoxSizer1->SetSizeHints(this);
 
     GameBoardPanel->Connect(wxEVT_PAINT,(wxObjectEventFunction)&SudokuSolverFrame::OnGameBoardPanelPaint,0,this);
+    GameBoardPanel->Connect(wxEVT_KEY_UP,(wxObjectEventFunction)&SudokuSolverFrame::OnGameBoardPanelKeyUp,0,this);
     GameBoardPanel->Connect(wxEVT_LEFT_UP,(wxObjectEventFunction)&SudokuSolverFrame::OnGameBoardPanelLeftUp,0,this);
     Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuSolverFrame::OnButtonNumClick);
     Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuSolverFrame::OnButtonNumClick);
@@ -599,12 +600,12 @@ void SudokuSolverFrame::OnGameBoardPanelKeyUp(wxKeyEvent& event)
             if(ctrlSelect==SET)
             {
                 mGuessGB->SetVal(row, col, keyUp-'0');
-                Refresh();
+
             }
             else if (ctrlSelect==NOTE)
             {
                 mGuessGB->SetPossibles(row, col, keyUp-'0');
-                Refresh();
+
             }
         }
 
@@ -616,16 +617,26 @@ void SudokuSolverFrame::OnGameBoardPanelKeyUp(wxKeyEvent& event)
             if(ctrlSelect==SET)
             {
                 mGuessGB->SetVal(row, col, keyUp-324);
-                Refresh();
+
             }
             else if (ctrlSelect==NOTE)
             {
                 mGuessGB->SetPossibles(row, col, keyUp-324);
-                Refresh();
+
             }
 
         }
     }
+    if((keyUp == WXK_LEFT || keyUp == WXK_NUMPAD_LEFT) && col > 0)
+        col--;
+    if((keyUp == WXK_RIGHT || keyUp == WXK_NUMPAD_RIGHT) && col < 8)
+        col++;
+    if((keyUp == WXK_UP || keyUp == WXK_NUMPAD_UP) && row > 0)
+        row--;
+    if((keyUp == WXK_DOWN || keyUp == WXK_NUMPAD_DOWN) && row < 8)
+        row++;
+
+    Refresh();
 }
 
 void SudokuSolverFrame::OnDifficultySelected(wxCommandEvent& event)
