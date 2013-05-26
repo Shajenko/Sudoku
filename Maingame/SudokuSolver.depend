@@ -4215,7 +4215,7 @@
 1365201607 source:c:\users\tim\documents\github\sudoku\solving and generating\gamesquare.cpp
 	"GameSquare.h"
 
-1369593989 source:c:\users\tim\documents\github\sudoku\solving and generating\genpuzzle.cpp
+1369594225 source:c:\users\tim\documents\github\sudoku\solving and generating\genpuzzle.cpp
 	"GameBoard.h"
 	<cstdlib>
 	<ctime>

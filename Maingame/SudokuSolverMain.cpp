@@ -572,79 +572,73 @@ void SudokuSolverFrame::OnButtonNoteClick(wxCommandEvent& event)
 
 void SudokuSolverFrame::OnButtonNumClick(wxCommandEvent& event)
 {
-    unsigned int i;
+    unsigned int num, i;
     wxString defaultStr;
 
     defaultStr.clear();
     for(i=0;i<9;i++)
         if(numButtons[i]->GetId() == event.GetId())
+            num = i+1;
+    if(row<9&&row>=0&&col<9&&col>=0&&!mGuessGB->GetShown(row, col))
+    {
+        if(ctrlSelect==SET)
         {
-            if(ctrlSelect==SET)
-            {
-                if(row<9&&row>=0&&col<9&&col>=0&&!mGuessGB->GetShown(row, col))
-                {
-                    mGuessGB->SetVal(row, col, i+1);
-                    // todo - remove possibles from other squares
-                }
-
-
-
-            }
-            else if (ctrlSelect==NOTE)
-            {
-                if(mGuessGB->GetPossibles(row, col, i+1))
-                    mGuessGB->RemovePossibles(row, col, i+1);
-                else
-                    mGuessGB->SetPossibles(row, col, i+1);
-            }
+            mGuessGB->SetVal(row, col, num);
         }
+        else if (ctrlSelect==NOTE)
+        {
+            if(mGuessGB->GetPossibles(row, col, num))
+                mGuessGB->RemovePossibles(row, col, num);
+            else
+                mGuessGB->SetPossibles(row, col, num);
+        }
+    }
+
     Refresh();
 }
 
 void SudokuSolverFrame::OnGameBoardPanelKeyUp(wxKeyEvent& event)
 {
-    unsigned int keyUp;
+    unsigned int keyUp, num;
     wxString debugStr;
 
     keyUp = event.GetKeyCode();
 
-
     if(keyUp >= '0' && keyUp <= '9')
     {
-
-        if(!mGuessGB->GetShown(row, col))
+        num = keyUp-'0';
+        if(row<9&&row>=0&&col<9&&col>=0&&!mGuessGB->GetShown(row, col))
         {
             if(ctrlSelect==SET)
             {
-                mGuessGB->SetVal(row, col, keyUp-'0');
-
+                mGuessGB->SetVal(row, col, num);
             }
             else if (ctrlSelect==NOTE)
             {
-                if(mGuessGB->GetPossibles(row, col, keyUp-'0'))
-                    mGuessGB->RemovePossibles(row, col, keyUp-'0');
+                if(mGuessGB->GetPossibles(row, col, num))
+                    mGuessGB->RemovePossibles(row, col, num);
                 else
-                    mGuessGB->SetPossibles(row, col, keyUp-'0');
-
+                    mGuessGB->SetPossibles(row, col, num);
             }
         }
 
     }
     else if(keyUp >= 324 && keyUp <=333)  // Numpad values for 0 - 9
     {
-        if(!mGuessGB->GetShown(row, col))
+        num = keyUp - 324;
+        if(row<9&&row>=0&&col<9&&col>=0&&!mGuessGB->GetShown(row, col))
         {
             if(ctrlSelect==SET)
             {
                 mGuessGB->SetVal(row, col, keyUp-324);
-
             }
             else if (ctrlSelect==NOTE)
             {
-                mGuessGB->SetPossibles(row, col, keyUp-324);
-
+                if(mGuessGB->GetPossibles(row, col, num))
+                    mGuessGB->RemovePossibles(row, col, num);
+                else
+                    mGuessGB->SetPossibles(row, col, num);
             }
-
         }
     }
     if((keyUp == WXK_LEFT || keyUp == WXK_NUMPAD_LEFT) && col > 0)
