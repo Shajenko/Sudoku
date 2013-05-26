@@ -71,6 +71,8 @@ bool GameBoard::RemoveLayerEasy(std::set<unsigned int> &setSqs, std::set<unsigne
     // remove each square's value, check it, and then put it back if the puzzle isn't solvable
     for(it=vecsetSqs.begin(); it!=vecsetSqs.end(); ++it)
     {
+        if(currSqs.size() < 35)
+            break;
         row = *it % 9;
         col = *it / 9;
         sq = &m_GameSquares[row][col];

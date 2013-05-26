@@ -187,6 +187,7 @@ SudokuSolverFrame::SudokuSolverFrame(wxWindow* parent,wxWindowID id)
     Connect(ID_BUTTON10,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuSolverFrame::OnButtonNumClick);
     Connect(ID_BUTTON11,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuSolverFrame::OnButtonSetClick);
     Connect(ID_BUTTON12,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuSolverFrame::OnButtonNoteClick);
+    Connect(ID_BUTTON13,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SudokuSolverFrame::OnButtonClearClick);
     ControlPanel->Connect(wxEVT_PAINT,(wxObjectEventFunction)&SudokuSolverFrame::OnControlPanelPaint,0,this);
     ControlPanel->Connect(wxEVT_ERASE_BACKGROUND,(wxObjectEventFunction)&SudokuSolverFrame::OnControlPanelEraseBackground,0,this);
     Connect(idNewPuzzle,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&SudokuSolverFrame::OnMenuNewPuzzleSelected);
@@ -382,6 +383,7 @@ void SudokuSolverFrame::DrawBoardNumbers(wxBufferedDC &dc)
             {
                 for(k=1;k<=9;k++)
                 {
+                    dc.SetTextForeground(blackC);
                     dc.SetFont(SmallFont);
                     pString.clear();
                     pString << k;
@@ -619,7 +621,10 @@ void SudokuSolverFrame::OnGameBoardPanelKeyUp(wxKeyEvent& event)
             }
             else if (ctrlSelect==NOTE)
             {
-                mGuessGB->SetPossibles(row, col, keyUp-'0');
+                if(mGuessGB->GetPossibles(row, col, keyUp-'0'))
+                    mGuessGB->RemovePossibles(row, col, keyUp-'0');
+                else
+                    mGuessGB->SetPossibles(row, col, keyUp-'0');
 
             }
         }
@@ -690,4 +695,13 @@ void SudokuSolverFrame::OnControlPanelPaint(wxPaintEvent& event)
     bdc.SetBrush(LGrayBr);
     bdc.SetPen(*wxLIGHT_GREY_PEN );
     bdc.DrawRectangle(0,0, sz.x, sz.y);
+}
+
+void SudokuSolverFrame::OnButtonClearClick(wxCommandEvent& event)
+{
+
+    mGuessGB->ClearPossibles(row, col);
+    mGuessGB->SetSquare(0, row, col);
+
+    Refresh();
 }

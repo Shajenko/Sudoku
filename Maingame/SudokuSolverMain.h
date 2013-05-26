@@ -66,6 +66,7 @@ class SudokuSolverFrame: public wxFrame
         void OnGameBoardPanelEraseBackground(wxEraseEvent& event);
         void OnControlPanelEraseBackground(wxEraseEvent& event);
         void OnControlPanelPaint(wxPaintEvent& event);
+        void OnButtonClearClick(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(SudokuSolverFrame)

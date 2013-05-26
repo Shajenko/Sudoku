@@ -77,6 +77,9 @@
 		<Unit filename="../Solving and Generating/Solve.cpp" />
 		<Unit filename="../Solving and Generating/SudokuAlgorithms.cpp" />
 		<Unit filename="../Solving and Generating/SudokuAlgorithms.h" />
+		<Unit filename="DebugPanel.cpp">
+			<Option target="Debug" />
+		</Unit>
 		<Unit filename="DebugPanel.h">
 			<Option target="Debug" />
 		</Unit>
