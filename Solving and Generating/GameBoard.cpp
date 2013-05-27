@@ -111,6 +111,7 @@ bool GameBoard::SetSquare(unsigned int val, int row, int col)
 	{
 		undoNum = sq->GetVal();
 		sq->SetVal(val);
+		sq->SetShown(false);
 		m_Rows[row].erase(undoNum);
 		m_Cols[col].erase(undoNum);
 		m_Sectors[sec].erase(undoNum);
@@ -129,6 +130,7 @@ bool GameBoard::SetSquare(unsigned int val, int row, int col)
 		val < 10)
 	{
 		sq->SetVal(val);
+		sq->SetShown(true);
 		m_Rows[row].insert(val);
 		m_Cols[col].insert(val);
 		m_Sectors[sec].insert(val);
