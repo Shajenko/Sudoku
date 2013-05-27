@@ -262,15 +262,17 @@ void SudokuSolverFrame::DrawBoardBackground(wxBufferedDC &dc)
     unsigned int smallSide;
     unsigned int i,j;
 
-    wxColour LGray, Red, White;
-    wxBrush LGrayBr, RedBr, WhiteBr;
+    wxColour LGray, Red, White, Blue;
+    wxBrush LGrayBr, RedBr, WhiteBr, BlueBr;
 
     LGray.Set(210,210,210);
     Red.Set(210,0,0);
     White.Set(255,255,255);
+    Blue.Set(0,150,255);
     LGrayBr.SetColour(LGray);
     RedBr.SetColour(Red);
     WhiteBr.SetColour(White);
+    BlueBr.SetColour(Blue);
 
     wxSize sz = GameBoardPanel->GetClientSize();
 
@@ -298,7 +300,7 @@ void SudokuSolverFrame::DrawBoardBackground(wxBufferedDC &dc)
         for(j=0;j<9;j++)
         {
             if(i == col && j == row)
-                dc.SetBrush(*wxBLUE_BRUSH);
+                dc.SetBrush(BlueBr);
             else
                 dc.SetBrush(LGrayBr);
             dc.DrawRectangle( 0 + spSq*i, 0 + spSq*j, spSq - 5, spSq - 5 );
