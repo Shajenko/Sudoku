@@ -4103,7 +4103,7 @@
 	<algorithm>
 	<vector>
 
-1369420654 c:\documents and settings\tas3409.adm\my documents\github\sudoku\solving and generating\gameboard.h
+1369844364 c:\documents and settings\tas3409.adm\my documents\github\sudoku\solving and generating\gameboard.h
 	"GameSquare.h"
 	<set>
 	<wx/file.h>
@@ -4164,7 +4164,7 @@
 1369420650 c:\documents and settings\tas3409.adm\my documents\github\sudoku\maingame\sudokusolverapp.h
 	<wx/app.h>
 
-1369426925 c:\documents and settings\tas3409.adm\my documents\github\sudoku\maingame\sudokusolvermain.h
+1369844364 c:\documents and settings\tas3409.adm\my documents\github\sudoku\maingame\sudokusolvermain.h
 	<wx/sizer.h>
 	<wx/menu.h>
 	<wx/panel.h>
