@@ -5,23 +5,36 @@
 #include <vector>
 
 
-bool GameBoard::NakedSingle(unsigned int row, unsigned int col)
+GameSquare * GameBoard::NakedSingle(unsigned int row, unsigned int col)
 {
     unsigned int numPos, poss;
+    GameSquare * result;
+
+    result = new GameSquare;
 
     // todo: Naked Single Algorithm
     numPos = this->m_GameSquares[row][col].GetNumPossibles();
     if(numPos == 1)   // Only one possible value
     {
     	poss = this->m_GameSquares[row][col].GetOnlyPossible();
-        this->m_GameSquares[row][col].SetVal(poss);// Set value to only possibility
-        return true;
+
+    	// set information for return GameSquare
+    	result->SetRow(row);
+    	result->SetCol(col);
+    	result->SetVal(poss);
+        return result;
     }
     else
-        return false;
+    {
+        result->SetRow(row);
+    	result->SetCol(col);
+    	result->SetVal(0);
+        return result;
+    }
+
 }
 
-bool GameBoard::HiddenSingle(unsigned int row, unsigned int col)
+GameSquare * GameBoard::HiddenSingle(unsigned int row, unsigned int col)
 {
     std::set<unsigned int> possSet;
     unsigned int i, j, sec;
@@ -29,6 +42,9 @@ bool GameBoard::HiddenSingle(unsigned int row, unsigned int col)
     bool hasPosVal;
     bool only;
     wxString dString, fdString;
+    GameSquare * result;
+
+    result = new GameSquare;
 
 	fdString.clear();
 
@@ -63,8 +79,10 @@ bool GameBoard::HiddenSingle(unsigned int row, unsigned int col)
 
         if(only)
         {
-            SetVal(row, col, possibleVal);
-            return true;
+            result->SetRow(row);
+            result->SetCol(col);
+            result->SetVal(possibleVal);
+            return result;
         }
 
         //Check all squares in this column
@@ -87,8 +105,10 @@ bool GameBoard::HiddenSingle(unsigned int row, unsigned int col)
 
 		if(only)
 		{
-			SetVal(row, col, possibleVal);
-				return true;
+            result->SetRow(row);
+            result->SetCol(col);
+            result->SetVal(possibleVal);
+            return result;
 		}
 
         //Check all squares in this sector
@@ -113,13 +133,19 @@ bool GameBoard::HiddenSingle(unsigned int row, unsigned int col)
 			}
         if(only)
         {
-            SetVal(row, col, possibleVal);
-            return true;
+            result->SetRow(row);
+            result->SetCol(col);
+            result->SetVal(possibleVal);
+            return result;
         }
     }
     if(fdString.size() > 0)
 		wxMessageBox(fdString);
-    return false;
+
+    result->SetRow(row);
+    result->SetCol(col);
+    result->SetVal(0);
+    return result;
 }
 
 bool GameBoard::BlockLine(unsigned int row, unsigned int col)

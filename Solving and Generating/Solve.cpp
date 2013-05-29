@@ -76,6 +76,7 @@ bool GameBoard::Solve(std::set<unsigned int> &remSqs, Difficulty diff)
     bool solSq, unknSq, tempSq;
     unsigned int row, col, sec, val;
     GameSquare * sq;
+    GameSquare * resultSq;
 
 
     solSq = true;
@@ -96,17 +97,19 @@ bool GameBoard::Solve(std::set<unsigned int> &remSqs, Difficulty diff)
             {
                 unknSq = true;
                 RemovePossibles(sq);  // Figure out what is possible
-                tempSq = NakedSingle(row, col);
-                if(!tempSq)
+                resultSq = NakedSingle(row, col);
+                if(resultSq->GetVal() == 0)
                     unknSq = true;
-                if(tempSq)
+                else
 				{
 					solSq = true;
-					val = sq->GetVal();
+					sq->SetVal(resultSq->GetVal());
+					val = resultSq->GetVal();
 					m_Rows[row].insert(val);
 					m_Cols[col].insert(val);
 					m_Sectors[sec].insert(val);
 				}
+				delete resultSq;
 
             }
         }
@@ -124,17 +127,19 @@ bool GameBoard::Solve(std::set<unsigned int> &remSqs, Difficulty diff)
             {
                 unknSq = true;
                 RemovePossibles(sq);  // Figure out what is possible
-                tempSq = HiddenSingle(row, col);
-                if(!tempSq)
+                resultSq = HiddenSingle(row, col);
+                if(resultSq->GetVal() == 0)
                     unknSq = true;
-                if(tempSq)
+                else
 				{
 					solSq = true;
-					val = sq->GetVal();
+					sq->SetVal(resultSq->GetVal());
+					val = resultSq->GetVal();
 					m_Rows[row].insert(val);
 					m_Cols[col].insert(val);
 					m_Sectors[sec].insert(val);
 				}
+				delete resultSq;
             }
         }
 

@@ -56,8 +56,8 @@ class GameBoard
         bool GetShown(int row, int col) { return m_GameSquares[row][col].GetShown();}
         void SetShown(int row, int col, bool val) { m_GameSquares[row][col].SetShown(val);}
 
-		bool NakedSingle(unsigned int row, unsigned int col);
-        bool HiddenSingle(unsigned int row, unsigned int col);
+		GameSquare * NakedSingle(unsigned int row, unsigned int col);
+        GameSquare * HiddenSingle(unsigned int row, unsigned int col);
         bool BlockLine(unsigned int row, unsigned int col);
         bool DoubleBlockLine(unsigned int row, unsigned int col);
         bool NakedPair(unsigned int row, unsigned int col);
